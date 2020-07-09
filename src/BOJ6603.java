@@ -1,30 +1,24 @@
 import java.util.*;
 public class BOJ6603 {
 
-	static boolean next_permutation(int [] arr) {
-		int i = arr.length -1;
-		while (i>0 && arr[i-1]>=arr[i]) {
-			i-=1;
+	static ArrayList <Integer> list = new ArrayList<>();
+	
+	static void go(int [] a, int index, int cnt) {
+		if (cnt==6) {
+			for (int num : list) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            return;
 		}
-		if (i<=0) return false;
-
-		int j = arr.length -1;
-		while (arr[j]<=arr[i-1]) {
-			j-=1;
-		}
-		int tmp = arr[j];
-		arr[j] = arr[i-1];
-		arr[i-1] = arr[j];
-
-		j = arr.length -1;
-		while(j>i) {
-			tmp = arr[j];
-			arr[j] = arr[i];
-			arr[i] = tmp;
-		}
-		return true;
+		int n = a.length;
+		if (n==index) return;
+		list.add(a[index]);
+		go(a, index+1,cnt+1);
+		list.remove(list.size()-1);
+		go(a, index+1, cnt);
 	}
-
+	
 	public static void main(String[] args) {
 
 		Scanner kb = new Scanner(System.in);
@@ -33,41 +27,13 @@ public class BOJ6603 {
 			int n = kb.nextInt();
 			if (n==0) break;
 			int [] a = new int [n];
-			int [] check = new int [n];
-
-			for (int i=0; i<n;i++) {
-				a[i] = kb.nextInt();
-			}		
 
 			for (int i=0; i<n; i++) {
-				if (i < n-6) check[i] = 0;
-				else check[i] = 1;
+				a[i] = kb.nextInt();
 			}
-
-			do {
-				ArrayList <Integer> list = new ArrayList<>();
-				for(int i=0; i<n; i++) {
-					if(check[i]==1) {
-						list.add(a[i]);
-					}
-				}
-
-				int [] tmp = new int [6];
-				for (int i=0; i<6;i++) {
-					tmp[i]=list.get(i);
-				}
-
-				do {
-					for (int i=0; i<6; i++) {
-						System.out.print(tmp[i] +" ");
-					}
-					System.out.println();
-
-				}while(next_permutation(tmp));	
-			}while(next_permutation(check));
-
-
-
+			
+			go(a, 0, 0);
+			System.out.println();
 		}
 		kb.close();
 	}
